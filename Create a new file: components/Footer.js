@@ -15,8 +15,8 @@ export default function Footer() {
         {/* Contact */}
         <div>
           <h2 className="text-lg font-semibold mb-3 text-white">Contact</h2>
-          <p className="text-sm">📍 20 Gana Street Maitama, Abuja, Nigeria</p>
-          <p className="text-sm">📞 +234 802 229 5640</p>
+          <p className="text-sm">📍 20 Gana Street, Maitama, Abuja</p>
+          <p className="text-sm">📞 08022295640</p>
           <p className="text-sm">✉️ info@zamkobookshop.com</p>
         </div>
 
