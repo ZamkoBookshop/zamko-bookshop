@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom global styles */
+/* Optional: custom styles for Zamko Bookshop */
 body {
-  font-family: sans-serif;
-  background-color: #f9f9f9;
+  font-family: system-ui, sans-serif;
+  background-color: #f9fafb; /* light gray background */
 }
