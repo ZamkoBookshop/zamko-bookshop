@@ -1,10 +1,9 @@
+// pages/index.js
 import Head from "next/head";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import Link from "next/link";
 
 export default function Home() {
-  // Temporary sample books (replace later with Supabase data)
+  // Sample books for now (later we can fetch from Supabase)
   const books = [
     {
       id: 1,
@@ -36,25 +35,6 @@ export default function Home() {
     },
   ];
 
-  const sliderSettings = {
-    dots: false,
-    infinite: true,
-    speed: 800,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2500,
-    cssEase: "linear",
-    responsive: [
-      {
-        breakpoint: 768, // tablet & mobile
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  };
-
   return (
     <>
       <Head>
@@ -66,25 +46,12 @@ export default function Home() {
       </Head>
 
       <main className="max-w-6xl mx-auto px-4 py-10">
-        <h1 className="text-3xl font-bold text-center mb-2">
+        <h1 className="text-3xl font-bold text-center mb-8">
           Zamko Bookshop
         </h1>
         <p className="text-center text-gray-600 mb-12">
           Small Bookshop, Big Ideas
         </p>
-
-        {/* Slider */}
-        <Slider {...sliderSettings}>
-          {books.map((book) => (
-            <div key={book.id} className="px-2">
-              <img
-                src={book.image}
-                alt={book.title}
-                className="rounded-xl shadow-md mx-auto h-64 w-full object-cover"
-              />
-            </div>
-          ))}
-        </Slider>
 
         {/* Book Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-12">
@@ -101,9 +68,13 @@ export default function Home() {
               <h2 className="mt-4 text-lg font-semibold">{book.title}</h2>
               <p className="text-gray-500">{book.author}</p>
               <p className="text-gray-700 font-bold">{book.price}</p>
-              <button className="mt-3 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-                Order & Pickup
-              </button>
+
+              {/* Link to Book Detail */}
+              <Link href={`/books/${book.id}`}>
+                <button className="mt-3 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+                  View Details
+                </button>
+              </Link>
             </div>
           ))}
         </div>
