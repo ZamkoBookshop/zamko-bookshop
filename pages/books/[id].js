@@ -2,7 +2,6 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { supabaseFetch } from "../../lib/supabaseClient";
 
 export default function BookDetail() {
   const router = useRouter();
@@ -11,35 +10,16 @@ export default function BookDetail() {
 
   useEffect(() => {
     if (!id) return;
-    async function load() {
-      // try to fetch from Supabase; fallback to sample if not available
-      try {
-        const rows = await supabaseFetch("books", { query: `select=id,title,author,description,price,cover_url&eq=id.${id}` });
-        if (rows && rows.length) {
-          setBook(rows[0]);
-        } else {
-          // fallback sample
-          setBook({
-            id,
-            title: "Sample Book",
-            author: "Sample Author",
-            description: "Sample description.",
-            price: 3000,
-            cover_url: "https://picsum.photos/360/480?random=21",
-          });
-        }
-      } catch (err) {
-        setBook({
-          id,
-          title: "Sample Book",
-          author: "Sample Author",
-          description: "Sample description.",
-          price: 3000,
-          cover_url: "https://picsum.photos/360/480?random=21",
-        });
-      }
-    }
-    load();
+
+    // For now, use a simple safe fallback book
+    setBook({
+      id,
+      title: `Sample Book ${id}`,
+      author: "Sample Author",
+      description: "This is a placeholder book description. Replace with real data later.",
+      price: 3500,
+      cover_url: `https://picsum.photos/360/480?random=${id}`,
+    });
   }, [id]);
 
   if (!book) return <div className="max-w-4xl mx-auto p-6">Loading…</div>;
@@ -59,7 +39,9 @@ export default function BookDetail() {
             <p className="text-sm text-gray-600">{book.author}</p>
             <p className="mt-4 text-gray-700">{book.description}</p>
             <div className="mt-6 font-semibold">₦{book.price}</div>
-            <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded">Order & Pickup</button>
+            <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded">
+              Order & Pickup
+            </button>
           </div>
         </div>
       </main>
