@@ -2,6 +2,8 @@
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { supabaseFetch } from "../../lib/supabaseClient";
 
 export default function BookDetail() {
   const router = useRouter();
@@ -10,16 +12,35 @@ export default function BookDetail() {
 
   useEffect(() => {
     if (!id) return;
-
-    // For now, use a simple safe fallback book
-    setBook({
-      id,
-      title: `Sample Book ${id}`,
-      author: "Sample Author",
-      description: "This is a placeholder book description. Replace with real data later.",
-      price: 3500,
-      cover_url: `https://picsum.photos/360/480?random=${id}`,
-    });
+    async function load() {
+      try {
+        const rows = await supabaseFetch("books", {
+          query: `select=id,title,author,description,price,cover_url&eq=id.${id}`,
+        });
+        if (rows && rows.length) {
+          setBook(rows[0]);
+        } else {
+          setBook({
+            id,
+            title: "Sample Book",
+            author: "Sample Author",
+            description: "Sample description.",
+            price: 3000,
+            cover_url: "https://picsum.photos/360/480?random=21",
+          });
+        }
+      } catch (err) {
+        setBook({
+          id,
+          title: "Sample Book",
+          author: "Sample Author",
+          description: "Sample description.",
+          price: 3000,
+          cover_url: "https://picsum.photos/360/480?random=21",
+        });
+      }
+    }
+    load();
   }, [id]);
 
   if (!book) return <div className="max-w-4xl mx-auto p-6">Loading…</div>;
@@ -32,7 +53,11 @@ export default function BookDetail() {
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row gap-8">
           <div className="md:w-1/3">
-            <img src={book.cover_url} alt={book.title} className="w-full rounded" />
+            <img
+              src={book.cover_url}
+              alt={book.title}
+              className="w-full rounded"
+            />
           </div>
           <div className="md:flex-1">
             <h1 className="text-2xl font-bold">{book.title}</h1>
@@ -42,6 +67,13 @@ export default function BookDetail() {
             <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded">
               Order & Pickup
             </button>
+
+            {/* Back button */}
+            <Link href="/books">
+              <button className="mt-6 bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+                ← Back to Books
+              </button>
+            </Link>
           </div>
         </div>
       </main>
