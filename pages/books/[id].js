@@ -68,12 +68,19 @@ export default function BookDetail() {
               Order & Pickup
             </button>
 
-            {/* Back button */}
-            <Link href="/books">
-              <button className="mt-6 bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
-                ← Back to Books
-              </button>
-            </Link>
+            {/* Navigation buttons */}
+            <div className="mt-6 flex gap-4">
+              <Link href="/books">
+                <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+                  ← Back to Books
+                </button>
+              </Link>
+              <Link href="/">
+                <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300">
+                  ← Back to Home
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
       </main>
