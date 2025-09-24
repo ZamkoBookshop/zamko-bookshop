@@ -9,6 +9,8 @@ export default function BookDetail() {
   const router = useRouter();
   const { id } = router.query;
   const [book, setBook] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState({ name: "", phone: "", note: "" });
 
   useEffect(() => {
     if (!id) return;
@@ -45,6 +47,15 @@ export default function BookDetail() {
 
   if (!book) return <div className="max-w-4xl mx-auto p-6">Loading…</div>;
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert(
+      `Thank you, ${form.name}! Your order for "${book.title}" has been placed.`
+    );
+    setShowForm(false);
+    setForm({ name: "", phone: "", note: "" });
+  };
+
   return (
     <>
       <Head>
@@ -64,7 +75,10 @@ export default function BookDetail() {
             <p className="text-sm text-gray-600">{book.author}</p>
             <p className="mt-4 text-gray-700">{book.description}</p>
             <div className="mt-6 font-semibold">₦{book.price}</div>
-            <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded">
+            <button
+              onClick={() => setShowForm(true)}
+              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
+            >
               Order & Pickup
             </button>
 
@@ -83,6 +97,56 @@ export default function BookDetail() {
             </div>
           </div>
         </div>
+
+        {/* Order Modal */}
+        {showForm && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+              <h2 className="text-xl font-bold mb-4">
+                Order & Pickup - {book.title}
+              </h2>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  className="w-full border p-2 rounded"
+                  required
+                />
+                <input
+                  type="tel"
+                  placeholder="Phone Number"
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  className="w-full border p-2 rounded"
+                  required
+                />
+                <textarea
+                  placeholder="Pickup Note (optional)"
+                  value={form.note}
+                  onChange={(e) => setForm({ ...form, note: e.target.value })}
+                  className="w-full border p-2 rounded"
+                />
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowForm(false)}
+                    className="px-4 py-2 bg-gray-300 rounded"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-blue-600 text-white rounded"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </main>
     </>
   );
